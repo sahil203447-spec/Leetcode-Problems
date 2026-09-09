@@ -1,0 +1,127 @@
+1. Intuition
+
+The problem asks us to implement a Queue using only Stacks.
+
+A queue follows FIFO (First In, First Out), meaning the element inserted first should be removed first.
+
+A stack follows LIFO (Last In, First Out), so if we use only one stack, the order would be reversed.
+
+To solve this, we can use two stacks:
+
+stack1 is used to store newly pushed elements.
+stack2 is used to remove and access elements in queue order.
+
+Whenever we need to pop() or peek(), we transfer all elements from stack1 to stack2. This reverses their order and gives us the FIFO behavior of a queue.
+
+Why did I choose this approach?
+It uses two stacks to simulate FIFO behavior.
+Stack operations are simple and efficient.
+The order is reversed when elements are transferred from one stack to another.
+Each element is transferred at most once between the stacks.
+2. Approach
+Algorithm
+
+Create two empty stacks:
+
+stack1 → stores elements when they are pushed.
+stack2 → stores elements when they need to be popped or accessed.
+push(x)
+
+Add the element directly to stack1.
+
+pop()
+If stack2 is empty, transfer all elements from stack1 to stack2.
+The top of stack2 is now the oldest element.
+Remove and return that element.
+peek()
+If stack2 is empty, transfer all elements from stack1 to stack2.
+Return the top element of stack2 without removing it.
+empty()
+
+Return True if both stacks are empty. Otherwise, return False.
+
+3. Time Complexity
+
+Push: O(1)
+
+Pop: O(1) amortized
+
+Peek: O(1) amortized
+
+Although transferring elements between the stacks can take O(n) for one operation, each element is transferred only once from stack1 to stack2.
+
+Therefore, over a sequence of operations, the amortized time complexity is O(1) per operation.
+
+4. Space Complexity
+
+O(n)
+
+The two stacks together can store all n elements of the queue.
+
+5. Code
+class MyQueue(object):
+
+    def __init__(self):
+        self.stack1 = []
+        self.stack2 = []
+
+    def push(self, x):
+        self.stack1.append(x)
+
+    def pop(self):
+        if not self.stack2:
+            while self.stack1:
+                self.stack2.append(self.stack1.pop())
+
+        return self.stack2.pop()
+
+    def peek(self):
+        if not self.stack2:
+            while self.stack1:
+                self.stack2.append(self.stack1.pop())
+
+        return self.stack2[-1]
+
+    def empty(self):
+        return not self.stack1 and not self.stack2
+Example
+Input
+push(1)
+push(2)
+peek()
+pop()
+empty()
+Output
+1
+1
+False
+Explanation
+
+Start with two empty stacks.
+
+Operation	stack1	stack2	Result
+push(1)	[1]	[]	Store 1
+push(2)	[1,2]	[]	Store 2
+peek()	[]	[2,1]	Return 1
+pop()	[]	[2]	Remove 1
+empty()	[]	[2]	False
+
+When peek() is called, the elements are transferred:
+
+stack1: [1, 2]
+
+        ↓ transfer
+
+stack2: [2, 1]
+              ↑
+            top
+
+Now 1, which was inserted first, is at the top of stack2, so it can be removed first.
+
+Key Concepts
+Queue (FIFO)
+Stack (LIFO)
+Two Stacks
+Stack Reversal
+Amortized Time Complexity
+Data Structure Implementation
