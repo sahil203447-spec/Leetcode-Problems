@@ -1,0 +1,157 @@
+1. Intuition
+
+In preorder traversal, we visit the nodes in the following order:
+
+Root → Left → Right
+
+For example:
+
+        1
+         \
+          2
+         /
+        3
+
+The preorder traversal is:
+
+1 → 2 → 3
+
+Instead of using recursion, the given solution uses a stack to perform the traversal iteratively.
+
+Since a stack follows LIFO (Last In, First Out), we push the right child first and the left child second. This makes the left child come out of the stack first.
+
+Why did I choose this approach?
+A stack can simulate recursive tree traversal.
+Preorder requires processing the root before its children.
+Pushing the right child before the left child ensures the left subtree is processed first.
+It avoids recursion and explicitly manages the traversal using a stack.
+It takes O(n) time.
+2. Approach
+Algorithm
+Create an empty list ans to store the preorder traversal.
+
+Create a stack and initially push the root:
+
+stack = [root]
+Continue while the stack is not empty.
+
+Remove the top node:
+
+temp = stack.pop()
+If the node is not None:
+Add its value to ans.
+Push its right child first.
+Push its left child second.
+
+Why right first?
+
+Because the stack follows LIFO:
+
+Push: right
+Push: left
+
+Pop: left
+
+Therefore, the traversal becomes:
+
+Root → Left → Right
+Continue until the stack becomes empty.
+Return ans.
+Time Complexity
+O(n)
+
+Every node in the binary tree is visited exactly once.
+
+Space Complexity
+O(n)
+
+The stack can contain up to n nodes in the worst case.
+
+3. Code
+class Solution(object):
+    def preorderTraversal(self, root):
+
+        ans = []
+
+        stack = [root]
+
+        while stack:
+
+            temp = stack.pop()
+
+            if temp:
+                ans.append(temp.val)
+
+                stack.append(temp.right)
+                stack.append(temp.left)
+
+        return ans
+Example
+
+Input
+
+root = [1,null,2,3]
+
+The tree is:
+
+        1
+         \
+          2
+         /
+        3
+Step-by-step
+
+Initially:
+
+stack = [1]
+
+Pop 1:
+
+ans = [1]
+
+Push right and left:
+
+right = 2
+left = None
+
+Stack:
+
+[2, None]
+
+Pop None:
+
+ans = [1]
+
+Pop 2:
+
+ans = [1, 2]
+
+Push:
+
+right = None
+left = 3
+
+Stack:
+
+[3]
+
+Pop 3:
+
+ans = [1, 2, 3]
+
+Therefore:
+
+Output
+
+[1,2,3]
+Key Concepts
+Binary Tree
+Tree Traversal
+Preorder Traversal
+Root → Left → Right
+Stack
+LIFO
+Iterative Traversal
+Depth-First Search (DFS)
+Time Complexity
+Space Complexity
