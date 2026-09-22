@@ -1,0 +1,140 @@
+1. Intuition
+
+A linked list is a palindrome if it reads the same from left to right and right to left.
+
+For example:
+
+1 → 2 → 2 → 1
+
+is a palindrome because the values from both ends match.
+
+The given code first stores all the linked list values in an array/list. Once the values are stored, we can use two pointers:
+
+left starts from the beginning.
+right starts from the end.
+
+We compare the values at both pointers. If they are equal, we move both pointers toward the center.
+
+If any pair is different, the linked list is not a palindrome.
+
+Why did I choose this approach?
+It is simple and easy to understand.
+Converting the linked list into a list allows direct access from both ends.
+Two pointers efficiently compare the values.
+It takes O(n) time.
+However, it uses O(n) extra space.
+
+Note: The original problem asks for O(1) extra space, but this particular code uses an array, so its space complexity is O(n). The O(1)-space solution uses the slow/fast pointer technique and reverses the second half of the linked list.
+
+2. Approach
+Algorithm
+Create an empty list called list_vals.
+Traverse the linked list:
+Store every node's value in list_vals.
+Move head to the next node.
+Initialize two pointers:
+left = 0
+right = len(list_vals) - 1
+
+Compare the values at both positions:
+
+list_vals[left] == list_vals[right]
+If they are equal:
+Increment left.
+Decrement right.
+Continue until the pointers meet or cross.
+
+Return:
+
+left >= right
+
+If the pointers meet/cross without finding a mismatch, the list is a palindrome.
+
+Time Complexity
+O(n)
+
+We traverse the linked list once and then compare the values using two pointers.
+
+Space Complexity
+O(n)
+
+The values of all n nodes are stored in list_vals.
+
+3. Code
+class Solution:
+    def isPalindrome(self, head: Optional[ListNode]) -> bool:
+
+        list_vals = []
+
+        while head:
+            list_vals.append(head.val)
+            head = head.next
+
+        left, right = 0, len(list_vals) - 1
+
+        while left < right and list_vals[left] == list_vals[right]:
+            left += 1
+            right -= 1
+
+        return left >= right
+Example
+
+Input
+
+head = [1,2,2,1]
+
+Output
+
+true
+
+Explanation
+
+The linked list is:
+
+1 → 2 → 2 → 1
+
+The values are stored as:
+
+[1, 2, 2, 1]
+
+Now compare from both ends:
+
+1 == 1  ✓
+2 == 2  ✓
+
+The pointers meet, so the linked list is a palindrome.
+
+Therefore:
+
+true
+Example 2
+
+Input
+
+head = [1,2]
+
+Output
+
+false
+
+Explanation
+
+The values are:
+
+[1, 2]
+
+Compare:
+
+1 != 2
+
+Therefore, the linked list is not a palindrome.
+
+Key Concepts
+Singly Linked List
+Palindrome
+Array/List
+Two Pointers
+Traversal
+Comparison from Both Ends
+Time Complexity
+Space Complexity
