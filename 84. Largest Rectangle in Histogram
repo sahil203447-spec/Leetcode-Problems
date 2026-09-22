@@ -1,0 +1,158 @@
+1. Intuition
+
+The histogram contains bars with different heights, and we need to find the largest rectangle that can be formed using consecutive bars.
+
+The important observation is that for every bar, we can consider that bar as the shortest bar of a rectangle and find how far we can extend it to the left and right.
+
+A Stack helps us efficiently find when a bar's possible rectangle ends. We maintain a monotonic increasing stack containing indices of bars.
+
+When we encounter a bar shorter than the bar at the top of the stack, the taller bar can no longer extend to the right. So we remove it from the stack and calculate its maximum possible rectangle.
+
+Why did I choose this approach?
+A stack efficiently keeps track of increasing bar heights.
+Each bar is pushed into and removed from the stack at most once.
+It avoids checking every possible rectangle.
+It achieves the optimal O(n) time complexity.
+The extra 0 height at the end ensures that all remaining bars are processed.
+2. Approach
+Algorithm
+Create an empty stack to store the indices of the histogram bars.
+Initialize:
+maxArea = 0
+Traverse the histogram from i = 0 to i = len(heights).
+
+For the last iteration, consider the current height as 0:
+
+int currentHeight = (i == heights.length) ? 0 : heights[i];
+
+This forces all remaining bars in the stack to be processed.
+
+While the stack is not empty and the current height is smaller than the height at the top of the stack:
+Remove the top index from the stack.
+That bar's height becomes the rectangle height.
+Calculate the width:
+
+If the stack is empty:
+
+width = i
+
+Otherwise:
+
+width = i - stack.peek() - 1
+
+Calculate:
+
+area = height × width
+Update maxArea.
+Push the current index into the stack.
+Return maxArea.
+Time Complexity
+O(n)
+
+Every index is pushed into the stack once and popped from the stack at most once.
+
+Space Complexity
+O(n)
+
+The stack can contain up to n indices.
+
+3. Code
+import java.util.*;
+
+class Solution {
+    public int largestRectangleArea(int[] heights) {
+
+        Stack<Integer> stack = new Stack<>();
+        int maxArea = 0;
+
+        for (int i = 0; i <= heights.length; i++) {
+
+            int currentHeight =
+                (i == heights.length) ? 0 : heights[i];
+
+            while (!stack.isEmpty() &&
+                   currentHeight < heights[stack.peek()]) {
+
+                int height = heights[stack.pop()];
+
+                int width;
+
+                if (stack.isEmpty()) {
+                    width = i;
+                } else {
+                    width = i - stack.peek() - 1;
+                }
+
+                int area = height * width;
+
+                maxArea = Math.max(maxArea, area);
+            }
+
+            stack.push(i);
+        }
+
+        return maxArea;
+    }
+}
+Example
+
+Input
+
+heights = [2,1,5,6,2,3]
+
+Output
+
+10
+
+Explanation
+
+The largest rectangle is formed using the bars:
+
+[5, 6]
+
+The limiting height is 5 and the width is 2.
+
+Therefore:
+
+Area = height × width
+     = 5 × 2
+     = 10
+
+So the maximum rectangle area is:
+
+10
+How the Stack Works
+
+For:
+
+[2, 1, 5, 6, 2, 3]
+
+When we reach 2 after 6:
+
+6 > 2
+
+So 6 is popped and its rectangle is calculated.
+
+Then 5 is also popped because:
+
+5 > 2
+
+For height 5:
+
+height = 5
+width = 2
+
+area = 5 × 2
+     = 10
+
+10 becomes the maximum area.
+
+Key Concepts
+Stack
+Monotonic Increasing Stack
+Histogram
+Array
+Index-Based Width Calculation
+height × width
+Greedy Processing
+Time Complexity Analysis
